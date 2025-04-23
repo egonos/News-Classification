@@ -92,7 +92,7 @@ def run_model(MODEL_NAME, MAX_LENGTH, LABEL_MAP, TEST_DF, DF_NAME):
     end_time = time.time()
 
     labels = list(map(LABEL_MAP.get, [log["label"] for log in logs]))
-    logits = [
+    positive_probs = [
         (
             log["score"]
             if (log["label"] == "POSITIVE") or (log["label"] == "LABEL_1")
@@ -102,8 +102,8 @@ def run_model(MODEL_NAME, MAX_LENGTH, LABEL_MAP, TEST_DF, DF_NAME):
     ]
     acc = accuracy_score(y_true=true_labels, y_pred=labels)
     f1 = f1_score(y_true=true_labels, y_pred=labels)
-    binary_log_loss = log_loss(y_true=true_labels, y_pred=logits)
-    roc_auc = roc_auc_score(y_true=true_labels, y_score=logits)
+    binary_log_loss = log_loss(y_true=true_labels, y_pred=positive_probs)
+    roc_auc = roc_auc_score(y_true=true_labels, y_score=positive_probs)
     average_inference_time = (end_time - start_time) / len(texts)
 
     print("Model Name: ", MODEL_NAME)
