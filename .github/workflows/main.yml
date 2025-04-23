@@ -71,4 +71,8 @@ jobs:
         - name: List Airflow dags
 
           run: |
-            docker exec airflow_scheduler airflow dags list
+            for i in {1..10}; do
+               docker exec airflow_scheduler airflow db check && break
+               echo "Waiting for airflow db to be ready..."
+               sleep 10
+            done
