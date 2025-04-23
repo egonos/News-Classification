@@ -1,0 +1,10 @@
+services:
+  airflow-webserver:
+    runtime: nvidia
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+
+  airflow-scheduler:
+    runtime: nvidia
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
