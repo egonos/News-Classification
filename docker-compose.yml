@@ -69,7 +69,7 @@ services:
       - airflow-webserver
       - mlflow_server
     deploy: {}
-    runtime: nvidia
+    #runtime: nvidia
     environment:
       # NVIDIA_VISIBLE_DEVICES: all
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
