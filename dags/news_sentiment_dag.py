@@ -50,8 +50,7 @@ def run_sentiment_pipeline():
             score = result["score"]
             confidence_score = 1 - score if label == "NEGATIVE" else score
             mlflow.log_metric(
-                f"News {
-                    i + 1} Positive Probability",
+                f"News {i + 1} Positive Probability",
                 confidence_score,
             )
             mlflow.log_param(f"News {i + 1} Predicted Label", label)
@@ -71,7 +70,7 @@ with DAG(
     dag_id="news_sentiment_dag",
     default_args=default_args,
     start_date=datetime(2023, 1, 1),
-    schedule_interval="@daily",
+    schedule="@daily",
     catchup=False,
 ) as dag:
 
