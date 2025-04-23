@@ -35,6 +35,14 @@ jobs:
           with:
             python-version: "3.8"
 
+        - name: Cache pip packages
+          uses: actions/cache@v3
+          with:
+            path: ~/.cache/pip
+            key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+            restore-keys: |
+              ${{ runner.os }}-pip
+
 
         - name: Install dependencies
           run: |
@@ -58,7 +66,7 @@ jobs:
 
         - name: Run Docker containers
           run: |
-            docker compose up -d
+            docker compose -f docker-compose.yml up -d
 
         - name: List Airflow dags
 
