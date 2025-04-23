@@ -45,7 +45,7 @@ services:
     ports:
       - "8080:8080"
     deploy: {}
-    runtime: nvidia
+    #runtime: nvidia
     environment:
       # NVIDIA_VISIBLE_DEVICES: all
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
