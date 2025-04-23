@@ -49,13 +49,17 @@ def run_sentiment_pipeline():
             label = result["label"]
             score = result["score"]
             confidence_score = 1 - score if label == "NEGATIVE" else score
-            mlflow.log_metric(f"text_{i}_positive_prob", confidence_score)
-            mlflow.log_param(f"text_{i}_predicted_label", label)
+            mlflow.log_metric(f"News {i+1} Positive Probability", confidence_score)
+            mlflow.log_param(f"News {i+1} Predicted Label", label)
 
-        mlflow.log_param("model_name", MODEL_NAME)
-        mlflow.log_param("max_length", MAX_LENGTH)
-        mlflow.log_param("device", "GPU" if torch.cuda.is_available() else "CPU")
-        mlflow.log_metric("total_inference_time", end_time - start_time)
+        mlflow.log_param("Model Name", MODEL_NAME)
+        mlflow.log_param("Max Token Length", MAX_LENGTH)
+        mlflow.log_param("Device", "GPU" if torch.cuda.is_available() else "CPU")
+        mlflow.log_metric("Average Inference Time", (end_time - start_time) / len(texts))
+
+        all_texts = "\n\n".join([f"{i+1}. News: {t}" for i, t in enumerate(texts)])
+        mlflow.log_text(all_texts, "News Articles")
+        
 
 
 with DAG(
@@ -69,5 +73,4 @@ with DAG(
     run_pipeline = PythonOperator(
         task_id="run_sentiment_pipeline", python_callable=run_sentiment_pipeline
     )
-
-dag
+mlflow.log_text()
