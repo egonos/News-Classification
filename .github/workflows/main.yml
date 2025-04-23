@@ -53,11 +53,11 @@ jobs:
 
         - name: Build Docker containers
           run: |
-            docker-compose build
+            docker compose build
 
         - name: Run Docker containers
           run: |
-            docker-compose up -d
+            docker compose up -d
 
         - name: List Airflow dags
 
