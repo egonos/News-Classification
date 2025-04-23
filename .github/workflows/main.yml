@@ -43,7 +43,7 @@ jobs:
 
         - name: Check with flake8
           run: |
-            flake8 dags/ model_selection/ --ignore=E501, E203
+            flake8 dags/ model_selection/ --ignore=E501,E203
 
         - name: Check DAG
           run: |
