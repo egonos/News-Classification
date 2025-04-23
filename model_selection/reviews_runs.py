@@ -1,4 +1,4 @@
-from utils import *
+from utils import load_reviews_data, run_model
 
 TEST_DF = load_reviews_data()
 

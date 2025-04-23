@@ -1,4 +1,4 @@
-from utils import *
+from utils import load_imdb_data, run_model
 import subprocess
 
 # dataset preparation
