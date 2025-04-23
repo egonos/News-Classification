@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.ipynb_checkpoints
+
+# Virtualenv
+env/
+venv/
+ENV/
+.venv/
+
+# Jupyter Notebook Metadata
+.ipynb_checkpoints/
+
+# VSCode
+.vscode/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Airflow & MLflow logs
+logs/
+mlruns/
+
+# Docker related
+*.log
+*.pid
+*.sock
+
+# Secrets
+.env
+
+# GitHub workflows cache
+.github/workflows/*.bak

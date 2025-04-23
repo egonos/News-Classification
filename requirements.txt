@@ -1,0 +1,5 @@
+transformers
+pandas
+requests
+mlflow
+# psycopg2-binary

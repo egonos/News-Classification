@@ -1,0 +1,63 @@
+name: CI/CD File
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+
+        services:
+            postgres:
+                image: postgres:13
+                env:
+                    POSTGRES_USER: airflow
+                    POSTGRES_PASSWORD: airflow
+                    POSTGRES_DB: airflow
+                ports:
+                    - 5432:5432
+                options: >-
+                    --health-cmd="pg_isready"
+                    --health-interval=10s
+                    --health-timeout=5s
+                    --health-retries=5
+
+        steps:
+        - name: Check codes
+          uses: actions/checkout@v3
+          
+          
+        - name: Set up Python 3.8
+          uses: actions/setup-python@v3
+          with:
+            python-version: "3.8"
+
+        - name: Install dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+            pip install flake8
+
+        - name: Check with flake8
+          run: |
+            flake8 dags/ model_selection/ --ignore=E501
+
+        - name: Check DAG
+          run: |
+            python dags/news_sentiment_dag.py
+
+        - name: Build Docker containers
+          run: |
+            docker-compose build
+
+        - name: Run Docker containers
+          run: |
+            docker-compose up -d
+
+        - name: List Airflow dags
+
+          run: |
+            docker exec airflow_scheduler airflow dags list
