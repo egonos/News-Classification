@@ -2,9 +2,8 @@ from airflow import DAG
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.operators.python import PythonOperator
 
-from datetime import datetime, timedelta
+from datetime import datetime
 import requests
-import json
 import mlflow
 import time
 import uuid
