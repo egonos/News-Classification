@@ -2,4 +2,4 @@ transformers
 pandas
 requests
 mlflow
-# psycopg2-binary
+apache-airflow-providers-postgres
