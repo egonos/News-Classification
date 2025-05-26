@@ -138,6 +138,7 @@ def save_results_to_postgres(**kwargs):
     cursor.close()
     conn.close()
 
+
 with DAG(
     dag_id="news_sentiment_dag",
     start_date=datetime(2024, 1, 1),
