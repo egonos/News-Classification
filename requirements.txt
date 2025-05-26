@@ -2,4 +2,4 @@ transformers
 pandas
 requests
 mlflow
-# apache-airflow-providers-postgres
+apache-airflow-providers-postgres
