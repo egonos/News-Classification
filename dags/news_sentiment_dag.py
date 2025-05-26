@@ -17,11 +17,12 @@ MODEL = "siebert/sentiment-roberta-large-english"
 MAX_LENGTH = 128
 MLFLOW_TRACKING_URI = "http://mlflow_server:5000"
 
+
 def pull_news(**kwargs):
     all_news_items = []
-    timeline = (datetime.today()- timedelta(days=7)).strftime('%Y-%m-%d') 
+    timeline = (datetime.today() - timedelta(days=7)).strftime("%Y-%m-%d")
 
-    #pull three news for each topic
+    # pull three news for each topic
     for query in QUERY_LIST:
         url = (
             f"https://newsapi.org/v2/everything?"
@@ -40,25 +41,26 @@ def pull_news(**kwargs):
             raise Exception(f"Error fetching news for {query}: {e}")
 
         articles = response.json().get("articles", [])
-        #separate the details of each news and store them in a dictionary
+        # separate the details of each news and store them in a dictionary
         texts = [
             {
                 "news_id": str(uuid.uuid4()),
                 "text": f"{a['title']} {a.get('description', '')}".strip(),
-                "topic": query
+                "topic": query,
             }
             for a in articles
         ]
 
-        #combine all the dictionaries in a list
+        # combine all the dictionaries in a list
         all_news_items.extend(texts)
 
-    #push the results to xcom
+    # push the results to xcom
     kwargs["ti"].xcom_push(key="news_items", value=all_news_items)
+
 
 def run_sentiment_pipeline(**kwargs):
 
-    #pull the news using xcom and separate ids and texts
+    # pull the news using xcom and separate ids and texts
     news_items = kwargs["ti"].xcom_pull(key="news_items", task_ids="pull_news_task")
     ids = [text["news_id"] for text in news_items]
     texts = [text["text"] for text in news_items]
@@ -75,32 +77,31 @@ def run_sentiment_pipeline(**kwargs):
         truncation=True,
     )
 
-    
     sentiment_results = sentiment_pipeline(texts)
-    
 
-    #track the results with mlflow
+    # track the results with mlflow
     mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
     with mlflow.start_run():
         for item, sentiment_result in zip(news_items, sentiment_results):
             label = sentiment_result["label"]
             score = sentiment_result["score"]
-            
 
-            mlflow.log_metric(f"{item['topic']} - {item['news_id']} - Confidence", score)
+            mlflow.log_metric(
+                f"{item['topic']} - {item['news_id']} - Confidence", score
+            )
             mlflow.log_param(f"{item['topic']} - {item['news_id']} - Label", label)
 
         mlflow.log_param("Model Name", MODEL)
         mlflow.log_param("Max Token Length", MAX_LENGTH)
         mlflow.log_param("Device", "GPU" if torch.cuda.is_available() else "CPU")
-        
 
     kwargs["ti"].xcom_push(key="sentiment_results", value=sentiment_results)
     kwargs["ti"].xcom_push(key="news_ids", value=ids)
 
+
 def save_results_to_postgres(**kwargs):
 
-    #pull the results as well as news using xcom 
+    # pull the results as well as news using xcom
     sentiment_results = kwargs["ti"].xcom_pull(
         key="sentiment_results", task_ids="run_sentiment_pipeline_task"
     )
@@ -110,7 +111,7 @@ def save_results_to_postgres(**kwargs):
     conn = hook.get_conn()
     cursor = conn.cursor()
 
-    #create the table
+    # create the table
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS news_sentiment_results (
