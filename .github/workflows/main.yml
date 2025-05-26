@@ -9,6 +9,9 @@ on:
 jobs:
     build-and-test:
         runs-on: ubuntu-latest
+        env:
+          GUSER: airflow
+          PGPASSWORD: airflow
 
         services:
             postgres:
