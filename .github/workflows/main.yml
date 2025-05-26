@@ -10,7 +10,7 @@ jobs:
     build-and-test:
         runs-on: ubuntu-latest
         env:
-          GUSER: airflow
+          PGUSER: airflow
           PGPASSWORD: airflow
 
         services:
