@@ -3,18 +3,19 @@ This project deploys a Large Language Model (LLM) for technology news classifica
 
 ## Model and Hyperparameter Selection
 Three different text classification models, each with varying maximum token lengths, were evaluated using the IMDB, Amazon, and mixed reviews datasets. Based on classification performance (Accuracy and ROC-AUC scores) and average response time, the most efficient model was selected: "siebert/sentiment-roberta-large-english" (`max_length = 128`).
-Detailed experiment results are available in `model_selection/model_logs.csv`.
+
+
+<img src="images/model_performances.png" alt="Model Performances" width="800">
+
+Also detailed experiment results are available in `model_selection/model_logs.csv`.
 
 ## Project Architecture
 Airflow DAG --> LLM Model Inference --> Postgres Logging --> MLflow Tracking
 
-## Features and Tools
-
-* **News Fetching:** Apache Airflow
-* **News Classification:** siebert/sentiment-roberta-large-english (`max_length = 128`)
-* **Result Storage:** PostgreSQL
-* **Model Tracking:** MLflow
-* **Containerization:** Docker
+1. Airflow is used for daily news collection. You can trigger the dag manually as well.
+2. The model classifies the news as it receives it. The labels are positive (1) and negative (0).
+3. The news, the topic and the classification results are logged in a Postgres database.
+4. During the process, the model specs like response time, device it used, the label tracked in a MLFlow Server.
 
 ## Setup Instructions
 
