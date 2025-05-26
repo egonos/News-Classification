@@ -5,7 +5,6 @@ from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 import requests
 import mlflow
-import time
 import uuid
 
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
@@ -76,9 +75,9 @@ def run_sentiment_pipeline(**kwargs):
         truncation=True,
     )
 
-    start_time = time.time()
+    
     sentiment_results = sentiment_pipeline(texts)
-    end_time = time.time()
+    
 
     #track the results with mlflow
     mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
