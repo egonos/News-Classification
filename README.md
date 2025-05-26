@@ -20,9 +20,9 @@ Airflow DAG --> LLM Model Inference --> Postgres Logging --> MLflow Tracking
 
 4. During the process, model specifications such as the device used and the predicted label's confidence score are tracked on the MLflow server. These MLflow records can be matched with the corresponding entries in the PostgreSQL database by using the unique IDs assigned to each instance.
 
-<img src="images/mlflow_table1.png" alt="MLFlow1" width="800">
+<img src="images/mlflow_table1.png" alt="MLFlow1" width="300">
 
-<img src="images/mlflow_table2.png" alt="MLFlow2" width="800">
+<img src="images/mlflow_table2.png" alt="MLFlow2" width="300">
 
 ## Setup Instructions
 
