@@ -74,8 +74,6 @@ def run_model(MODEL_NAME, MAX_LENGTH, LABEL_MAP, TEST_DF, DF_NAME):
         model=model,
         tokenizer=tokenizer,
         device=device,
-        max_length=MAX_LENGTH,
-        truncation=True,
     )
 
     texts = TEST_DF.iloc[:, 0].values
@@ -87,7 +85,9 @@ def run_model(MODEL_NAME, MAX_LENGTH, LABEL_MAP, TEST_DF, DF_NAME):
     start_time = time.time()
     for i in tqdm(range(0, len(texts), batch_size)):
         batch = texts[i : i + batch_size]
-        output = sentiment_pipeline(batch.tolist(), truncation=True)
+        output = sentiment_pipeline(
+            batch.tolist(), truncation=True, max_length=MAX_LENGTH
+        )
         logs.extend(output)
     end_time = time.time()
 
@@ -108,7 +108,7 @@ def run_model(MODEL_NAME, MAX_LENGTH, LABEL_MAP, TEST_DF, DF_NAME):
 
     print("Model Name: ", MODEL_NAME)
     print("Token Max Length: ", MAX_LENGTH)
-    print("Dataset: ", "IMDB")
+    print("Dataset: ", DF_NAME)
     print("Pos-Neg Ratio: ", TEST_DF.iloc[:, 1].value_counts(normalize=True)[1])
     print("Accuracy: ", acc)
     print("F1 Score: ", f1)

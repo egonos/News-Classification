@@ -73,11 +73,11 @@ def run_sentiment_pipeline(**kwargs):
         model=model,
         tokenizer=tokenizer,
         device=device,
-        max_length=MAX_LENGTH,
-        truncation=True,
     )
 
-    sentiment_results = sentiment_pipeline(texts)
+    sentiment_results = sentiment_pipeline(
+        texts, truncation=True, max_length=MAX_LENGTH
+    )
 
     # track the results with mlflow
     mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
